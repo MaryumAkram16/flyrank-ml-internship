@@ -247,13 +247,14 @@
 <section id="abstract">
   <div class="wrap">
     <h2 class="section-head"><span class="num">00</span> Abstract</h2>
-    <p>Which pages should a content team review first, given limited weekly review capacity? This project builds and validates a content-prioritization pipeline on FlyRank's anonymized search-performance dataset, comparing a hand-tuned baseline rule against two machine-learning models under a client-holdout validation design. The central, counter-intuitive result: the simple baseline rule (Precision@50 = 0.90) outperformed a Random Forest (0.76) and matched Logistic Regression (0.92) — traced, via error analysis, to the model over-weighting high-traffic pages rather than the specific, independently confirmed CTR-vs-position signal the baseline targets directly. The output is a three-tier, human-reviewed action playbook, offered as decision-support rather than an automated system.</p>
+    <p>FlyRank manages content across many client accounts at once, and editorial review time is the scarce resource — no team can manually re-check every page every cycle. This project treats that operational reality as its case study. Which pages should a content team review first, given limited weekly review capacity? This project builds and validates a content-prioritization pipeline on FlyRank's anonymized search-performance dataset, comparing a hand-tuned baseline rule against two machine-learning models under a client-holdout validation design. The central, counter-intuitive result: the simple baseline rule (Precision@50 = 0.90) outperformed a Random Forest (0.76) and matched Logistic Regression (0.92) — traced, via error analysis, to the model over-weighting high-traffic pages rather than the specific, independently confirmed CTR-vs-position signal the baseline targets directly. The output is a three-tier, human-reviewed action playbook, offered as decision-support rather than an automated system.</p>
   </div>
 </section>
 
 <section id="introduction">
   <div class="wrap">
     <h2 class="section-head"><span class="num">01</span> Introduction</h2>
+    <p>This is the FlyRank content-refresh problem directly: a large, multi-client page library, uneven and unmonitored performance decay, and no scalable way for a human to eyeball every page. The lane this project comes from — Refresh / Content Opportunity Scoring — exists because that triage decision has to be made somehow; this paper tests whether it can be made defensibly.</p>
     <p>A content team with real editorial capacity can typically review 20–50 pages a week. Out of an inventory of thousands, which pages deserve that attention first? This is a prioritization problem, not a pure prediction problem: the value of the output is measured by whether the top of a ranked list is trustworthy, not by overall accuracy across every page.</p>
     <p>This study treats it that way from the start — a scoring/ranking task, evaluated with Precision@K rather than accuracy, built around one unit of analysis: one page, for one client, summarized over a trailing 90-day window.</p>
   </div>
