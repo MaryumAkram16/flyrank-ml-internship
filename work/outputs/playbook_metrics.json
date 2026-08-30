@@ -1,0 +1,14 @@
+{
+  "rule": "underperforming_ctr_and_stale",
+  "volume_floor": 500,
+  "total_eligible_pages": 16726,
+  "action_breakdown": {
+    "monitor": 12177,
+    "review_for_refresh": 4003,
+    "flag_for_tracking_audit": 546
+  },
+  "baseline_precision_at_50": 0.9,
+  "random_forest_precision_at_50": 0.76,
+  "validation_design": "client-holdout, 6 test clients",
+  "top_quartile_threshold": 0.39295910548609403
+}
