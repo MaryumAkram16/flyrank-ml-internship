@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Pages Should You Fix First? — A Content-Prioritization Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c2430;
+    --ink-soft: #4a5568;
+    --paper: #f7f6f2;
+    --panel: #ffffff;
+    --rule: #d8d4c9;
+    --confirmed: #0f7a6c;
+    --confirmed-bg: #e7f3f1;
+    --mixed: #a8720b;
+    --mixed-bg: #f6eddc;
+    --reversed: #a8443f;
+    --reversed-bg: #f6e6e4;
+    --mono-bg: #ece9e1;
+    --max-w: 760px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--confirmed); text-decoration-thickness: 1px; }
+  a:hover { color: var(--reversed); }
+
+  .wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    padding: 88px 0 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+  }
+  h1.title {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 46px);
+    line-height: 1.15;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+  .byline {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .byline a { color: var(--ink-soft); }
+
+  section { padding: 52px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: none; }
+
+  h2.section-head {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    font-size: 26px;
+    margin: 0 0 22px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2.section-head .num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  h3 { font-family: 'Source Serif 4', serif; font-size: 19px; margin: 28px 0 10px; }
+
+  p { margin: 0 0 16px; }
+  ul, ol { margin: 0 0 16px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88em;
+    background: var(--mono-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    background: var(--ink);
+    color: #eae7de;
+    padding: 18px 20px;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+
+  /* verdict pill system — the paper's signature: every checked claim gets a verdict */
+  .verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 3px 10px 3px 8px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+  }
+  .verdict::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+  .verdict.confirmed { background: var(--confirmed-bg); color: var(--confirmed); }
+  .verdict.confirmed::before { background: var(--confirmed); }
+  .verdict.mixed { background: var(--mixed-bg); color: var(--mixed); }
+  .verdict.mixed::before { background: var(--mixed); }
+  .verdict.reversed { background: var(--reversed-bg); color: var(--reversed); }
+  .verdict.reversed::before { background: var(--reversed); }
+
+  .finding-block {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin: 18px 0 22px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0 22px;
+    font-size: 15.5px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  tr.hero-row td { font-weight: 600; }
+  tr.hero-row { background: var(--confirmed-bg); }
+
+  .score-cell { font-family: 'IBM Plex Mono', monospace; }
+
+  figure { margin: 24px 0; }
+  figure img { width: 100%; border-radius: 6px; border: 1px solid var(--rule); }
+  figcaption {
+    font-size: 13.5px; color: var(--ink-soft); margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .reviewer-note {
+    border-left: 3px solid var(--reversed);
+    padding: 4px 0 4px 18px;
+    margin: 20px 0;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+  }
+
+  .no-go {
+    background: var(--reversed-bg);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 18px 0;
+  }
+  .no-go h3 { margin-top: 0; color: var(--reversed); }
+
+  .tier-bar {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0 8px;
+  }
+  .tier-bar span { flex: 1; }
+  .tier-labels {
+    display: flex;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+  .tier-labels span { flex: 1; text-align: center; }
+
+  footer {
+    padding: 48px 0 80px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .credit-box {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 18px;
+  }
+  .credit-box a { font-weight: 500; }
+
+  .repro-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .repro-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    background: var(--mono-bg);
+    padding: 6px 12px;
+    border-radius: 100px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .repro-links a:hover { background: var(--confirmed-bg); color: var(--confirmed); }
+
+  @media (max-width: 600px) {
+    body { font-size: 16px; }
+    header.hero { padding: 56px 0 40px; }
+    section { padding: 38px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Applied Search Intelligence · FlyRank ML Internship Capstone</p>
+    <h1 class="title">Which Pages Should You Fix First? A Content-Prioritization Study</h1>
+    <p class="byline">Maryum Akram · <a href="https://github.com/MaryumAkram16/flyrank-ml-internship">github.com/MaryumAkram16/flyrank-ml-internship</a></p>
+  </div>
+</header>
+
+<section id="abstract">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">00</span> Abstract</h2>
+    <p>Which pages should a content team review first, given limited weekly review capacity? This project builds and validates a content-prioritization pipeline on FlyRank's anonymized search-performance dataset, comparing a hand-tuned baseline rule against two machine-learning models under a client-holdout validation design. The central, counter-intuitive result: the simple baseline rule (Precision@50 = 0.90) outperformed a Random Forest (0.76) and matched Logistic Regression (0.92) — traced, via error analysis, to the model over-weighting high-traffic pages rather than the specific, independently confirmed CTR-vs-position signal the baseline targets directly. The output is a three-tier, human-reviewed action playbook, offered as decision-support rather than an automated system.</p>
+  </div>
+</section>
+
+<section id="introduction">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">01</span> Introduction</h2>
+    <p>A content team with real editorial capacity can typically review 20–50 pages a week. Out of an inventory of thousands, which pages deserve that attention first? This is a prioritization problem, not a pure prediction problem: the value of the output is measured by whether the top of a ranked list is trustworthy, not by overall accuracy across every page.</p>
+    <p>This study treats it that way from the start — a scoring/ranking task, evaluated with Precision@K rather than accuracy, built around one unit of analysis: one page, for one client, summarized over a trailing 90-day window.</p>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">02</span> Data</h2>
+    <p>The primary dataset is the anonymized starter release (<code>content_refresh_anonymized.csv</code>) — 30,000 pages, 44 columns, one row per pseudonymized content item. After applying a 500-impression volume floor (excluding pages too small to trust a CTR measurement), 16,726 pages remained across 28 clients.</p>
+    <p>A separate exploration used the full warehouse release on Hugging Face (<code>FlyRank/internship-warehouse</code>), specifically <code>fact_content_daily_performance</code> for a mid-panel development month (March 2026: 9,841,378 rows, 55 clients, 331,437 content items), used to validate the data contract and table grain before modeling on the smaller starter slice.</p>
+    <h3>Deliberately excluded</h3>
+    <ul>
+      <li>Pages below the impression floor — without it, top-ranked pages were dominated by 1–4 impression pages with a mechanical 0% CTR (noise, not signal).</li>
+      <li>Any FlyRank product decision flag (<code>health_score</code>, <code>priority_score</code>, <code>action_type</code>) — never shipped in this dataset by design, and never reconstructed.</li>
+      <li>Warehouse rows without confirmed GA4 tracking, to avoid mistaking "not yet tracked" for "no traffic."</li>
+    </ul>
+    <p>All identifiers are pseudonymized. No client names, domains, URLs, or raw queries appear anywhere in this study or its underlying repository.</p>
+  </div>
+</section>
+
+<section id="methodology">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">03</span> Methodology</h2>
+
+    <h3>Signal validation, before building anything</h3>
+    <span class="verdict confirmed">confirmed</span>
+    <p><strong>CTR vs. position tier</strong> — clean, monotonic decline: 1.484 (top 3) → 0.652 (page 1) → 0.323 (striking distance) → 0.222 (page 3–5) → 0.150 (deep). This matches the logic behind FlyRank's own <code>low_ctr_visible_page</code> product flag.</p>
+
+    <div class="tier-bar">
+      <span style="background:#0f7a6c"></span>
+      <span style="background:#2f8f7f"></span>
+      <span style="background:#c9a24a"></span>
+      <span style="background:#c47a52"></span>
+      <span style="background:#9a938a"></span>
+    </div>
+    <div class="tier-labels">
+      <span>top 3 · 1.484</span><span>page 1 · 0.652</span><span>striking · 0.323</span><span>page 3–5 · 0.222</span><span>deep · 0.150</span>
+    </div>
+
+    <span class="verdict mixed">mixed</span>
+    <p><strong>Staleness vs. decline rate</strong> — not monotonic: 51.2% → 61.1% → 46.7% → 60.0% across increasing staleness buckets, with the two oldest buckets carrying very small sample sizes (n=169, n=5). A useful negative result: staleness alone does not cleanly predict decline in this data.</p>
+
+    <h3>Baseline rule</h3>
+    <p><code>baseline_action_score = 0.7 × ctr_gap_score + 0.3 × staleness_score</code> — weighted to reflect the signal check above: the confirmed signal (CTR gap) carries more weight than the mixed one (staleness). Reason code: <code>underperforming_ctr_and_stale</code>.</p>
+
+    <h3>Model</h3>
+    <p>Random Forest (200 trees, depth 6, class-balanced), with Logistic Regression fit alongside as a simple-model check. Features: <code>impressions_90d</code>, <code>avg_position</code>, <code>ctr</code>, <code>content_age_days</code>, <code>days_since_last_update</code>, <code>word_count</code> (median-imputed; missing in ~29% of training rows), and one-hot-encoded <code>position_tier</code>.</p>
+    <p><strong>Target / proxy:</strong> <code>is_declining = (trend_direction == "down")</code> — a current-window bucket, not a forward-validated outcome.</p>
+
+    <h3>Validation design</h3>
+    <p>Client-holdout split (grouped by <code>client_id</code>, 80/20 — 22 train clients / 6 test clients, zero overlap). This mattered in practice: a naive random split let 27 clients leak across train and test, and produced an inflated Precision@50 of 0.88 — higher than the grouped result precisely because it partly reflected memorization, not generalization.</p>
+
+    <h3>Leakage audit</h3>
+    <p>No label-derived or future-window field appears among the model's inputs. Feature-to-label correlations ranged from −0.18 to +0.03 — well below the 0.9 threshold that would suggest a feature secretly encodes the label.</p>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">04</span> Results</h2>
+    <span class="verdict reversed">reversed</span>
+    <p>The base rate for the positive label is 59.6% — reported here so Precision@50 is never read in isolation. On the identical client-holdout test split, using the identical metric:</p>
+
+    <table>
+      <thead><tr><th>Method</th><th>Precision@50</th></tr></thead>
+      <tbody>
+        <tr class="hero-row"><td>Baseline rule (<code>underperforming_ctr_and_stale</code>)</td><td class="score-cell">0.90</td></tr>
+        <tr><td>Logistic Regression</td><td class="score-cell">0.92</td></tr>
+        <tr><td>Random Forest</td><td class="score-cell">0.76</td></tr>
+      </tbody>
+    </table>
+
+    <p>This is the reverse of the starter pipeline's own demonstration (baseline 0.240 → Random Forest 0.740), and it is reported without adjustment.</p>
+
+    <h3>Why</h3>
+    <p>Where the Random Forest and the baseline disagreed (40 unique picks each): the baseline's unique picks had a 90.0% actual decline rate at an average of 2,958 impressions; the Random Forest's unique picks had only a 72.5% decline rate despite nearly 3× the impressions (8,763). Feature importances confirm the cause — <code>content_age_days</code> (0.26) outranked <code>ctr</code> (0.19) in the forest, pulling weight toward a general traffic/age signal instead of the specific, confirmed CTR-vs-position gap.</p>
+
+    <figure>
+      <img src="https://raw.githubusercontent.com/MaryumAkram16/flyrank-ml-internship/main/work/figures/action_breakdown.png" alt="Bar chart showing the count of pages in each action category: monitor, review_for_refresh, flag_for_tracking_audit">
+      <figcaption>fig. 1 — action breakdown across 16,726 eligible pages</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="limitations">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">05</span> Limitations</h2>
+    <div class="finding-block">
+      <ul>
+        <li>The proxy label is a current-window bucket, not a validated future outcome.</li>
+        <li>No causal claim: refreshing a flagged page is not shown to <em>cause</em> recovery — that requires an experiment this data does not provide.</li>
+        <li>No claim is made about Google's ranking algorithm — only observable outcomes were measured.</li>
+        <li>The baseline-vs-model comparison rests on a small test set (6 clients, ~1,260 rows) and should be treated as directional pending a larger or repeated evaluation.</li>
+        <li>Findings come from a 30,000-row anonymized starter sample, not the full ~79M-row warehouse; patterns may differ at scale.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="recommendations">
+  <div class="wrap">
+    <h2 class="section-head"><span class="num">06</span> Ranked recommendations</h2>
+    <table>
+      <thead><tr><th>Action</th><th>Count</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>monitor</code></td><td>12,177</td><td>Below top quartile — no action this cycle</td></tr>
+        <tr><td><code>review_for_refresh</code></td><td>4,003</td><td>Real CTR gap + moderate staleness — genuine review candidate</td></tr>
+        <tr><td><code>flag_for_tracking_audit</code></td><td>546</td><td>Top-tier position, 500+ impressions, exactly 0% CTR — likely a tracking issue, not content</td></tr>
+      </tbody>
+    </table>
+
+    <p class="reviewer-note">A cluster of top-tier, high-impression pages reporting exactly 0% CTR is statistically unusual for a real top-3 search result — the likely cause is broken tracking or indexing, not weak content. This was split into its own action category rather than folded into generic refresh recommendations.</p>
+
+    <div class="no-go">
+      <h3>What should never be automated</h3>
+      <ul>
+        <li>Publishing AI-rewritten content from the score alone.</li>
+        <li>Deprioritizing or removing low-scoring pages — <code>monitor</code> means "not flagged this cycle," not "worthless."</li>
+        <li>Bulk-actioning tied scores without spot-checking — 24 pages shared an identical score in review, and identical scores do not guarantee an identical root cause.</li>
+        <li>Treating a <code>flag_for_tracking_audit</code> row as a content problem before a human confirms the tracking issue.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2 class="section-head" style="border:none; padding:0; margin-bottom:14px;"><span class="num">07</span> Reproducibility</h2>
+    <p>Every number above traces back to a committed notebook and a receipts file (<code>work/outputs/playbook_metrics.json</code>) in the repository. Fixed random seed (<code>random_state=42</code>) throughout.</p>
+    <pre><code>git clone https://github.com/MaryumAkram16/flyrank-ml-internship.git
+cd flyrank-ml-internship
+pip install -r requirements.txt</code></pre>
+    <div class="repro-links">
+      <a href="https://github.com/MaryumAkram16/flyrank-ml-internship/blob/main/work/notebooks/w05_model.ipynb">w05_model.ipynb</a>
+      <a href="https://github.com/MaryumAkram16/flyrank-ml-internship/blob/main/work/notebooks/w07_action_playbook.ipynb">w07_action_playbook.ipynb</a>
+      <a href="https://github.com/MaryumAkram16/flyrank-ml-internship/blob/main/work/notebooks/capstone.ipynb">capstone.ipynb</a>
+      <a href="https://github.com/MaryumAkram16/flyrank-ml-internship/blob/main/work/outputs/playbook_metrics.json">playbook_metrics.json</a>
+    </div>
+
+    <h2 class="section-head" style="border:none; padding:0; margin: 40px 0 14px;"><span class="num">08</span> Acknowledgments &amp; data credit</h2>
+    <div class="credit-box">
+      Built on the FlyRank ML Internship dataset — <a href="https://flyrank.ai">flyrank.ai</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
